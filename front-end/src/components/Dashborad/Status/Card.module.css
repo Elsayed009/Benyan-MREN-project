@@ -1,0 +1,30 @@
+
+
+.cardStatus {
+  background-color: var(--whit-color);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.icon {
+  font-size: 2rem;
+  color: var(--main-color);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.counter {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.title {
+  color: #666;
+}
