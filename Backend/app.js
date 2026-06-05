@@ -20,8 +20,10 @@ const connectedDB = require("./config/db");
 connectedDB();
 
 const adminRoutes = require("./routes/auth.route");
+const userRoutes = require("./routes/user.route");
 
 app.use("/api/dashboard", adminRoutes);
+app.use("/api/dashboard/users", userRoutes);
 
 // Port
 const port = process.env.PORT || 3000;

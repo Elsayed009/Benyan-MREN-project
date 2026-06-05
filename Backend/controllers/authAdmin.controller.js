@@ -31,10 +31,17 @@ const loginController = async (req, res) => {
     if (!matchedPassword)
       return res.status(400).json({ msg: "Invalid Email Or Password" });
 
-    const token = await jwt.sign({ id: admin._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+    const token = await jwt.sign(
+      { id: admin._id, role: "admin" },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+      },
+    );
     res.status(200).json({ msg: "Success Login", token });
-  } catch (error) {}
+  } catch (error) {
+    res.status(500).json({ msg: "Internal Server Error" });
+  }
 };
 // Export
+module.exports = loginController;
