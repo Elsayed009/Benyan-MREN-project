@@ -1,0 +1,27 @@
+.loginWrapper {
+  width: 100%;
+  max-width: 380px;
+
+  background-color: var(--white-color);
+  padding: 28px;
+  border-radius: 14px;
+
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+
+.input {
+  border-radius: 8px;
+  font-size: 0.9rem;
+  padding: 10px 12px;
+}
+
+.input:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 0.15rem rgba(110, 193, 228, 0.25);
+}
+
+.loginWrapper label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}

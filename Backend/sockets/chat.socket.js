@@ -1,62 +1,44 @@
-
+// JWT
 const jwt = require("jsonwebtoken");
-const socketAuthMiddleware = (socket, next) => {
+// Auth Middlewar
+const socketAuth = (socket, next) => {
   try {
-    // get token
+    // Get Token
     const token = socket.handshake.headers.token;
-    if (!token) return next(new Error("not ound Token"));
-    // vrefiy token
+    if (!token) return next(new Error("Token Not Found"));
+    // verify token
     const payload = jwt.verify(token, process.env.JWT_SECRET);
     socket.userId = payload.id;
     socket.role = payload.role;
+    // next
     next();
   } catch (error) {
-    return next(new Error("Invalid Token"));
+    return next(new Error("Token Not Found"));
   }
 };
 
-const chatSocketController = (io) => { // io you will create in the app.js file
+const socketChatController = (io) => {
   // Use Middleware
-  io.use(socketAuthMiddleware);
-  // Connection Socket.io
+  io.use(socketAuth);
+
+  // Create Connection
   io.on("connection", (socket) => {
-    console.log(
-      `User ${socket.userId} & Role ${socket.role} is Connection`,
-    );
-
-
-
-    // create room
-    if(socket.role === "admin"){
+    console.log(`User is ${socket.userId} & Role ${socket.role} is Connection`);
+    // Create Room To Admin & User
+    if (socket.role === "admin") {
       socket.join("room_admins");
-    }else if(socket.role === "user") {
-      socket.join(`room_${socket.userId}`)
+    } else if (socket.role === "user") {
+      socket.join(`room_${socket.userId}`);
     }
-    // end room
-    // first senario  
-    socket.on('sendMsg', (data)=> {
-      io.to("room_admins").emit("receivedUserMsg", { // advanced shortcut code // emit taks address and obj data
+
+    // S1 => User Send Problem To Admin
+    socket.on("sendMsg", (data) => {
+      io.to("room_admins").emit("receiveMsg", {
         msg: data.msg,
         user: socket.userId,
-        role: socket.role,
-        createdAt: new Date()
       });
     });
-
-    socket.on('adminReply', (data) => {
-      socket.join(`room_${data.toUserId}`); // mk it targetId
-      // send msg to the spacific user
-      io.to(`room_${data.toUserId}`).emit('receivedAdminMsg', {
-        msg: data.msg,
-        user: socket.userId,
-        role: socket.role,
-        createdAt: new Date()
-      });
-    
-    });
-
-
   });
 };
 
-module.exports = chatSocketController;
+module.exports = socketChatController;
